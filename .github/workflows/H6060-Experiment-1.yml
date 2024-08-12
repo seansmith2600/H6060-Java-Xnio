@@ -146,3 +146,53 @@ jobs:
         with:
           build-directory: target
           artifact-name: cyclonedx-sbom-java-${{ matrix.os }}
+
+  security_tool_analysis:
+    name: Perform Security Tool Analysis
+    uses: seansmith2600/H6060-Experiment-Resources/.github/workflows/experiment-1-java.yml@main
+    needs: [ create-dependency-tree, create-cyclonedx-sbom ]
+    secrets:
+      github-token: ${{ secrets.GITHUB_TOKEN }}
+      github-api-token: ${{ secrets.GIT_API_TOKEN }}
+      nvd-api-key: ${{ secrets.NVD_API_KEY }}
+      opencve-username: ${{ secrets.OPENCVE_USERNAME }}
+      opencve-password: ${{ secrets.OPENCVE_PASSWORD }}
+      honeycomb-api-key: ${{ secrets.HONEYCOMB_API_KEY }}
+      eclipse-steady-host-url: ${{ secrets.ECLIPSE_STEADY_HOST_URL }}
+      deepsource-api-key: ${{ secrets.DEEPSOURCE_API_KEY }}
+      semgrep-app-token: ${{ secrets.SEMGREP_APP_TOKEN }}
+      snyk-token: ${{ secrets.SNYK_TOKEN }}
+      sonarqube-username: ${{ secrets.SONARQUBE_USERNAME }}
+      sonarqube-password: ${{ secrets.SONARQUBE_PASSWORD }}
+      sonarqube-token-ubuntu: ${{ secrets.SONARQUBE_TOKEN_UBUNTU }}
+      sonarqube-token-macos: ${{ secrets.SONARQUBE_TOKEN_MACOS }}
+      sonarqube-token-windows: ${{ secrets.SONARQUBE_TOKEN_WINDOWS }}
+      sonarqube-user-token-ubuntu: ${{ secrets.SONARQUBE_USER_TOKEN_UBUNTU }}
+      sonarqube-user-token-macos: ${{ secrets.SONARQUBE_USER_TOKEN_MACOS }}
+      sonarqube-user-token-windows: ${{ secrets.SONARQUBE_USER_TOKEN_WINDOWS }}
+      sonarqube-url-ubuntu: ${{ secrets.SONARQUBE_URL_UBUNTU }}
+      sonarqube-url-macos: ${{ secrets.SONARQUBE_URL_MACOS }}
+      sonarqube-url-windows: ${{ secrets.SONARQUBE_URL_WINDOWS }}
+    with:
+      sast-codeql-enabled: ${{ inputs.sast-codeql-enabled }}
+      sast-horusec-enabled: ${{ inputs.sast-horusec-enabled }}
+      sast-semgrep-enabled: ${{ inputs.sast-semgrep-enabled }}
+      sast-snyk-code-enabled: ${{ inputs.sast-snyk-code-enabled }}
+      sast-sonarqube-enabled: ${{ inputs.sast-sonarqube-enabled }}
+      sca-eclipse-steady-enabled: ${{ inputs.sca-eclipse-steady-enabled }}
+      sca-grype-enabled: ${{ inputs.sca-grype-enabled }}
+      sca-owasp-dependency-check-enabled: ${{ inputs.sca-owasp-dependency-check-enabled }}
+      sca-snyk-enabled: ${{ inputs.sca-snyk-enabled }}
+      reporting-enabled: ${{ inputs.reporting-enabled }}
+      eclipse-steady-workspace-token: 66E16528B2AF8E5CBE4DA32687A48C65
+      eclipse-steady-application-group-id: org.jboss.xnio
+      eclipse-steady-application-artifact-id: xnio-all
+      eclipse-steady-application-version: 3.8.6.Final
+      eclipse-steady-project-source-directories: api/src,nio-impl/src
+      horusec-files-or-paths-to-ignore: "**/test/**"
+      semgrep-files-or-paths-to-ignore: "test"
+      java-version: 11
+      project-name: H6060-Java-Xnio
+      build-command: "mvn -Dmaven.test.skip=true clean install"
+      build-artifact: java-build
+      build-directory: target
